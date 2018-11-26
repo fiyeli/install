@@ -1,0 +1,40 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    equatable (0.5.0)
+    necromancer (0.4.0)
+    open_uri_redirections (0.2.1)
+    pastel (0.7.2)
+      equatable (~> 0.5.0)
+      tty-color (~> 0.4.0)
+    ruby-progressbar (1.10.0)
+    rubyzip (1.2.2)
+    timers (4.2.0)
+    tty-color (0.4.3)
+    tty-cursor (0.6.0)
+    tty-prompt (0.18.0)
+      necromancer (~> 0.4.0)
+      pastel (~> 0.7.0)
+      timers (~> 4.0)
+      tty-cursor (~> 0.6.0)
+      tty-reader (~> 0.5.0)
+    tty-reader (0.5.0)
+      tty-cursor (~> 0.6.0)
+      tty-screen (~> 0.6.4)
+      wisper (~> 2.0.0)
+    tty-screen (0.6.5)
+    wisper (2.0.0)
+    zip (2.0.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  open_uri_redirections
+  ruby-progressbar
+  rubyzip
+  tty-prompt
+  zip
+
+BUNDLED WITH
+   1.17.1
