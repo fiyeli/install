@@ -22,6 +22,6 @@ sudo cp include/nnpack.h /usr/include/
 sudo cp deps/pthreadpool/include/pthreadpool.h /usr/include/
 
 # Build darknet (with NNpack by default)
-git clone https://github.com/digitalbrain79/darknet-nnpack.git
+git clone https://github.com/pilbi/darknet-nnpack.git
 cd darknet-nnpack
 make
