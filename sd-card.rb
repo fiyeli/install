@@ -8,8 +8,8 @@ require 'open_uri_redirections'
 require 'fileutils'
 require 'zip'
 
-TMP_RASPBIAN = '/tmp/raspbian_latest'.freeze
-TMP_RASPBIAN_IMG = '/tmp/raspbian.img'.freeze
+TMP_RASPBIAN = '/tmp/raspbian_lite_latest'.freeze
+TMP_RASPBIAN_IMG = '/tmp/raspbian-stretch-lite.img'.freeze
 TMP_MOUNT_ENDPOINT = '/tmp/raspmount'.freeze
 TMP_WPA_SUPPLICANT = '/tmp/wpa-supplicant'.freeze
 
@@ -41,7 +41,7 @@ if File.file?(TMP_RASPBIAN)
 else
   puts 'download latest raspbian'
   pbar = nil
-  download = open('https://downloads.raspberrypi.org/raspbian_latest', \
+  download = open('https://downloads.raspberrypi.org/raspbian_lite_latest', \
                   allow_redirections: :all, \
                   content_length_proc: lambda { |t|
                     pbar = ProgressBar.create(total: t) if t && t > 0
