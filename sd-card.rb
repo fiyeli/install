@@ -7,24 +7,58 @@ require 'open-uri'
 require 'open_uri_redirections'
 require 'fileutils'
 require 'zip'
+require 'faker'
+
+# TODO: understand if we have to use loop0p1 or mm**1
+# or we have to write before to dd image !
+# we have to forgot loop0p1 ....
+# dd must be last step
 
 TMP_RASPBIAN = '/tmp/raspbian_lite_latest'.freeze
 TMP_RASPBIAN_IMG = '/tmp/raspbian-stretch-lite.img'.freeze
+TMP_BUILDING_IMG = '/tmp/fiyeli.img'.freeze
 TMP_MOUNT_ENDPOINT = '/tmp/raspmount'.freeze
 TMP_WPA_SUPPLICANT = '/tmp/wpa-supplicant'.freeze
 
+DEV_MAPPER = nil
+
 def exec_with_sudo(cmd, message)
+  res = ""
   if ENV['USER'] != 'root'
     puts message
-    system("sudo #{cmd}")
+    puts "CMD: sudo #{cmd}"
+    res = `sudo #{cmd}`
+    puts "RES: #{res}"
   else
-    system(cmd)
+    res = `#{cmd}`
   end
+  return res
+end
+
+def shut_down
+  puts 'sync'
+  `sync`
+  puts "\n remove kpartx partition"
+  cmd_kpartx = "kpartx -v -d #{TMP_BUILDING_IMG}"
+  exec_with_sudo(cmd_kpartx, 'need root access to use kpartx')
+  puts "\n umount gracefully..."
+  cmd_umount = "umount #{TMP_MOUNT_ENDPOINT}"
+  exec_with_sudo(cmd_umount,
+                 "need root access to umount sd card on #{TMP_MOUNT_ENDPOINT}")
+end
+
+def mount_part(disk)
+  cmd_mount = "mount #{disk} #{TMP_MOUNT_ENDPOINT}"
+  puts 'mount sd on /tmp/sdcard'
+  FileUtils.mkdir_p(TMP_MOUNT_ENDPOINT) unless File.exist?(TMP_MOUNT_ENDPOINT)
+
+  exec_with_sudo(cmd_mount,
+                 "need root access to mount sd card on #{TMP_MOUNT_ENDPOINT}")
 end
 
 prompt = TTY::Prompt.new
 
-required_bin = %w[tail hwinfo kpartx]
+required_bin = %w[tail kpartx]
 required_bin.each do |bin|
   unless find_executable(bin)
     STDERR.puts("ABORTED! You have to install #{bin}")
@@ -32,8 +66,13 @@ required_bin.each do |bin|
   end
 end
 
-disk = `hwinfo --short --disk | tail -n +2`.lines.map(&:chomp)
-
+exlude_dist_contains = ['nvme']
+disk = `lsblk --noheadings --raw -o NAME,MOUNTPOINT \
+ | awk '$1~/[[:digit:]]/ && $2 == ""'`
+       .lines.map { |e| "/dev/#{e.chomp}" }
+       .delete_if do |element|
+  exlude_dist_contains.any? { |e| element.include?(e) }
+end
 sd = prompt.select('Choose your disk?', disk).split[0].inspect
 
 if File.file?(TMP_RASPBIAN)
@@ -65,26 +104,18 @@ else
     entry.extract(TMP_RASPBIAN_IMG)
   end
 end
-cmd_dd = "dd if=#{TMP_RASPBIAN_IMG} of=#{sd} \
-bs=4M conv=fsync status=progress"
-exec_with_sudo(cmd_dd, 'need root access to dd image on sd card')
 
+# copy the raw raspbian image to building image
+`cp #{TMP_RASPBIAN_IMG} #{TMP_BUILDING_IMG}`
 # use kpartx / kpartx create simlink
-cmd_kpartx = "sudo kpartx -a #{TMP_RASPBIAN_IMG}"
-exec_with_sudo(cmd_kpartx, 'need root access to use kpartx')
+cmd_kpartx = "sudo kpartx -v -a #{TMP_BUILDING_IMG}"
+# should be like loop0p1,loop0p2
+DEV_MAPPER = exec_with_sudo(cmd_kpartx, 'need root access to use kpartx')
+             .scan(/(loop.*)\s\(/)
+puts DEV_MAPPER
 
-cmd_mount = "mount /dev/mapper/loop0p1 #{TMP_MOUNT_ENDPOINT}"
-puts 'mount sd on /tmp/sdcard'
-FileUtils.mkdir_p(TMP_MOUNT_ENDPOINT) unless File.exist?(TMP_MOUNT_ENDPOINT)
-
-exec_with_sudo(cmd_mount,
-               "need root access to mount sd card on #{TMP_MOUNT_ENDPOINT}")
-def shut_down
-  puts "\n umount gracefully..."
-  cmd_umount = "umount #{TMP_MOUNT_ENDPOINT}"
-  exec_with_sudo(cmd_umount,
-                 "need root access to umount sd card on #{TMP_MOUNT_ENDPOINT}")
-end
+puts('set up boot partition')
+mount_part("/dev/mapper/#{DEV_MAPPER[0].first}")
 
 # Trap ^C
 Signal.trap('INT') do
@@ -101,8 +132,6 @@ end
 cmd_touch = "echo 'make ssh file at boot' | sudo tee #{TMP_MOUNT_ENDPOINT}/ssh"
 exec_with_sudo(cmd_touch, 'need root to touch ssh at /boot')
 
-# TODO: https://howchoo.com/g/ote0ywmzywj/how-to-enable-ssh-on-raspbian-without-a-screen
-
 ssid = prompt.ask('Give me your SSID ?')
 passwd = prompt.ask('Give me your password ?')
 File.open(TMP_WPA_SUPPLICANT, 'w') do |file|
@@ -117,5 +146,24 @@ cmd_create_wpa_supplicant =
   "cp #{TMP_WPA_SUPPLICANT} #{TMP_MOUNT_ENDPOINT}/wpa_supplicant.conf"
 exec_with_sudo(cmd_create_wpa_supplicant,
                'need root to mv wpa_supplicant.conf at /boot')
+
+# unmounted boot partition
+puts 'sync'
+`sync`
+cmd_umount = "umount #{TMP_MOUNT_ENDPOINT}"
+exec_with_sudo(cmd_umount,
+               "need root access to umount sd card on #{TMP_MOUNT_ENDPOINT}")
+
+puts('end setting boot partition')
+mount_part("/dev/mapper/#{DEV_MAPPER[1].first}")
+
+cmd_hostname = "echo  fiyeli-#{Faker::Science.scientist.gsub!(/\s/, '-')} "\
+             " | sudo tee #{TMP_MOUNT_ENDPOINT}/etc/hostname"
+exec_with_sudo(cmd_hostname,
+               "need root access to umount sd card on #{TMP_MOUNT_ENDPOINT}")
+
+cmd_dd = "dd if=#{TMP_BUILDING_IMG} of=#{sd} \
+bs=4M conv=fsync status=progress"
+exec_with_sudo(cmd_dd, 'need root access to dd image on sd card')
 
 shut_down
