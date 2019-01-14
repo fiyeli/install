@@ -45,7 +45,7 @@ def mount_part(disk)
 end
 
 def check_prerequisite
-  required_bin = %w[tail kpartx nmap sshpass]
+  required_bin = %w[tail kpartx nmap sshpass hwinfo]
   required_bin.each do |bin|
     unless find_executable(bin)
       STDERR.puts("ABORTED! You have to install #{bin}")
@@ -55,11 +55,9 @@ def check_prerequisite
 end
 
 def find_disk
-  exlude_dist_contains = ['nvme']
-  disk = `lsblk --noheadings --raw -o NAME,MOUNTPOINT \
-   | awk '$1~/[[:digit:]]/ && $2 == ""'`
-         .lines.map { |e| "/dev/#{e.chomp}" }
-         .delete_if do |element|
+  exlude_dist_contains = ['nvme','sdb','sda','ram']
+  disk = `hwinfo --short --disk | tail -n +2`.lines.map(&:chomp)
+           .delete_if do |element|
     exlude_dist_contains.any? { |e| element.include?(e) }
   end
   sd = PROMPT.select('Choose your disk?', disk).split[0].inspect
