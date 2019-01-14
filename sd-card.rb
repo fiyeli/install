@@ -55,10 +55,14 @@ def check_prerequisite
 end
 
 def find_disk
-  exlude_dist_contains = ['nvme','sdb','sda','ram']
+  exlude_dist_contains = ['nvme','sdb','sda','ram','loop']
   disk = `hwinfo --short --disk | tail -n +2`.lines.map(&:chomp)
            .delete_if do |element|
     exlude_dist_contains.any? { |e| element.include?(e) }
+  end
+  if disk.size == 0
+    puts "no device found"
+    exit(false)
   end
   sd = PROMPT.select('Choose your disk?', disk).split[0].inspect
 
