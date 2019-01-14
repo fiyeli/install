@@ -55,17 +55,13 @@ def check_prerequisite
 end
 
 def find_disk
-  exlude_dist_contains = ['nvme','sdb','sda','ram','loop']
+  exlude_dist_contains = %w[nvme sdb sda ram loop]
   disk = `hwinfo --short --disk | tail -n +2`.lines.map(&:chomp)
-           .delete_if do |element|
+                                             .delete_if do |element|
     exlude_dist_contains.any? { |e| element.include?(e) }
   end
-  if disk.size == 0
-    puts "no device found"
-    exit(false)
-  end
+  abort('no device found') if disk.empty?
   sd = PROMPT.select('Choose your disk?', disk).split[0].inspect
-
   sd
 end
 
@@ -171,6 +167,11 @@ end
 def setup_rasp_boot
   enable_ssh
   enable_wpa
+  enable_camera
+end
+
+def enable_camera
+  `echo "\nstart_x=1\ngpu_mem=128\n" | sudo tee -a #{TMP_MOUNT_ENDPOINT}/config.txt`
 end
 
 def umount_part1_img
@@ -272,4 +273,3 @@ if options.include? :scan
 else
   main
 end
-
