@@ -14,6 +14,7 @@ git clone https://github.com/pilbi/Fiyeli-Darknet-NNPACK.git
 # Adding env var
 echo "Adding Fiyeli environment variables..."
 echo "# Fiyeli Env Var" >> ~/.bashrc
+
 # Fiyeli directories
 export FIYELI_DIR=`pwd`
 echo "export FIYELI_DIR=`pwd`" >> ~/.bashrc
@@ -29,6 +30,12 @@ echo "export FIYELI_AI_DIR=\"$FIYELI_DIR/Fiyeli-Darknet-NNPACK\"" >> ~/.bashrc
 
 export FIYELI_API_DIR="$FIYELI_DIR/api"
 echo "export FIYELI_AI_DIR=\"$FIYELI_DIR/api\"" >> ~/.bashrc
+
+export FIYELI_IMAGES="$FIYELI_CORE_DIR/img"
+echo "export FIYELI_IMAGES=\"$FIYELI_CORE_DIR/img\""
+
+export FIYELI_DATA="$FIYELI_CORE_DIR/data"
+echo "export FIYELI_DATA=\"$FIYELI_CORE_DIR/data\""
 
 # Camera module
 export FIYELI_CAMERA_SHOT="$FIYELI_CAMERA_DIR/camera.py"
