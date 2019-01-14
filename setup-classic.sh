@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 # Create main folder
-echo "#### Creating main folder ####"
-mkdir ~/FiyeliTest
-cd ~/FiyeliTest
+echo "Creating main folder..."
+mkdir ~/Fiyeli
+cd ~/Fiyeli
 
 # Clone repos
-echo "##### Cloning repos #####"
+echo "Cloning repos..."
 git clone https://github.com/pilbi/camera.git
 git clone https://github.com/pilbi/core.git
 git clone https://github.com/pilbi/api.git
 git clone https://github.com/pilbi/Fiyeli-Darknet-NNPACK.git
 
 # Adding env var
-echo "#### Adding environment variables #####"
+echo "Adding environment variables..."
 echo "# Fiyeli Env Var" >> ~/.bashrc
 # Fiyeli directories
 export FIYELI_DIR=`pwd`
@@ -39,4 +39,4 @@ export FIYELI_AI_RUN="$FIYELI_AI_DIR/darknet detector person cfg/coco.data cfg/y
 echo "export FIYELI_AI_RUN=\"$FIYELI_AI_DIR/darknet detector person cfg/coco.data cfg/yolov3.cfg yolov3.weights \"" >> ~/.bashrc
 
 
-echo "You still have to install the AI module (Fiyeli-Darknet-NNPACK), in order to do this you can check the Fiyeli-Darknet-NNPACK folder readme"
+echo "You still have to install the AI module (Fiyeli-Darknet-NNPACK), in order to do this you can check the Fiyeli-Darknet-NNPACK readme."
