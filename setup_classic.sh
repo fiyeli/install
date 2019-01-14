@@ -47,4 +47,4 @@ echo "export FIYELI_AI_RUN=\"$FIYELI_AI_DIR/darknet detector person cfg/coco.dat
 
 # Main routine
 export FIYELI_CORE_ROUTINE="$FIYELI_CORE_DIR/routine.py"
-echo "export FIYELI_CORE_ROUTINE=\"$FIYELI_CORE_DIR/routine.py\"" ~/.profile
+echo "export FIYELI_CORE_ROUTINE=\"$FIYELI_CORE_DIR/routine.py\"" >> ~/.profile
