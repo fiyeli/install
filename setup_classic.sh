@@ -44,8 +44,3 @@ echo "export FIYELI_CAMERA_SHOT=\"$FIYELI_CAMERA_DIR/camera.py\"" >> ~/.bashrc
 # AI module
 export FIYELI_AI_RUN="$FIYELI_AI_DIR/darknet detector person cfg/coco.data cfg/yolov3.cfg yolov3.weights "
 echo "export FIYELI_AI_RUN=\"$FIYELI_AI_DIR/darknet detector person cfg/coco.data cfg/yolov3.cfg yolov3.weights \"" >> ~/.bashrc
-
-# Enable pi Camera
-echo "Enabling pi camera"
-echo "start_x=1" >> /boot/config.txt
-echo "disable_camera_led=1" >> /boot/config.txt

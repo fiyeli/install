@@ -171,7 +171,7 @@ def setup_rasp_boot
 end
 
 def enable_camera
-  `echo "\nstart_x=1\ngpu_mem=128\n" | sudo tee -a #{TMP_MOUNT_ENDPOINT}/config.txt`
+  `echo "\nstart_x=1\ngpu_mem=128\ndisable_camera_led=1\n" | sudo tee -a #{TMP_MOUNT_ENDPOINT}/config.txt`
 end
 
 def umount_part1_img
