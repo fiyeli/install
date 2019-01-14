@@ -17,7 +17,6 @@ def scan_network_and_test_ssh(hostname)
     raspberries.each do |raspberry|
       real_hostname = `sshpass -p raspberry \
       ssh -oStrictHostKeyChecking=no pi@#{raspberry.ip.to_s} hostname`
-    p real_hostname
       return raspberry.ip if hostname.chomp == real_hostname.chomp
     end
     sleep(5)
