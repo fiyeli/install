@@ -6,7 +6,7 @@ def find_raspberries
   seek = Hooray::Seek.new
   raspberries = seek.nodes.select do |element|
     # mac adress of raspberry
-    element.mac[0..7].upcase.tr(':', '') == 'B827EB'
+    !element.mac.nil? && element.mac[0..7].upcase.tr(':', '') == 'B827EB'
   end
   raspberries
 end
@@ -30,4 +30,3 @@ def find_rasp(hostname)
 
   'NOT FOUND'
 end
-
