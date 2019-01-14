@@ -1,3 +1,6 @@
+```
+bundle install
+```
 
 To setup sd card
 ```console
