@@ -14,10 +14,10 @@ end
 
 def scan_network_and_test_ssh(hostname)
   20.times do
-    raspberries = find_raspberries
-    raspberries.each do |raspberry|
+    find_raspberriesraspberries.each do |raspberry|
       real_hostname = `sshpass -p raspberry \
-      ssh -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no pi@#{raspberry.ip.to_s} hostname`
+      ssh -o UserKnownHostsFile=/dev/null \
+      -oStrictHostKeyChecking=no pi@#{raspberry.ip.to_s} hostname`
       return raspberry.ip if hostname.chomp == real_hostname.chomp
     end
     sleep(5)
