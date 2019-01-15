@@ -148,7 +148,6 @@
     cd ninja
     git checkout release
     ./configure.py --bootstrap
-    export NINJA_PATH=$PWD
 
 - name: clone NNPACK-darknet
   become: false
@@ -159,7 +158,6 @@
 - name: Install NNPACK confu
   become: false
   shell: |
-    # Build NNPACK
     cd ~/NNPACK-darknet
     confu setup
 
@@ -173,8 +171,7 @@
   become: false
   shell:  |
     cd ~/NNPACK-darknet
-    $NINJA_PATH/ninja
-    # ninja
+    ~/ninja/ninja
 
 - name: Copy binary
   become: false
