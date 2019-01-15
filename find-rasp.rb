@@ -5,6 +5,7 @@ require 'hooray'
 def find_raspberries
   seek = Hooray::Seek.new
   raspberries = seek.nodes.select do |element|
+    p element
     # mac adress of raspberry
     !element.mac.nil? && element.mac[0..7].upcase.tr(':', '') == 'B827EB'
   end
@@ -16,7 +17,7 @@ def scan_network_and_test_ssh(hostname)
     raspberries = find_raspberries
     raspberries.each do |raspberry|
       real_hostname = `sshpass -p raspberry \
-      ssh -oStrictHostKeyChecking=no pi@#{raspberry.ip.to_s} hostname`
+      ssh -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no pi@#{raspberry.ip.to_s} hostname`
       return raspberry.ip if hostname.chomp == real_hostname.chomp
     end
     sleep(5)
