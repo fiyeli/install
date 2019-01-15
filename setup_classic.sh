@@ -43,7 +43,7 @@ echo "export FIYELI_CAMERA_SHOT=\"$FIYELI_CAMERA_DIR/camera.py\"" >> ~/.profile
 
 # AI module
 export FIYELI_AI_RUN="$FIYELI_AI_DIR/darknet detector person cfg/coco.data cfg/yolov3.cfg yolov3.weights "
-echo "export FIYELI_AI_RUN=\"$FIYELI_AI_DIR/darknet detector person cfg/coco.data cfg/yolov3.cfg yolov3.weights \"" >> ~/.profile
+echo "export FIYELI_AI_RUN=\"$FIYELI_AI_DIR/darknet detector person $FIYELI_AI_DIR/cfg/coco.data $FIYELI_AI_DIR/cfg/yolov3.cfg yolov3.weights \"" >> ~/.profile
 
 # Main routine
 export FIYELI_CORE_ROUTINE="$FIYELI_CORE_DIR/routine.py"
