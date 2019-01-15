@@ -1,11 +1,17 @@
 # Create the SD card
-## Requirements 
-In order to run the SD-maker script written in Ruby, you have to install some dependencies.
+## Requirement
+You will need ruby to create the SD card. You can use [rbenv](https://github.com/rbenv/rbenv) or install Ruby on your computer.
+You will anyway have to install some dependencies.
 Open a Terminal, go into the project repository and complete the following steps if needed :
 ```bash
-sudo apt install ruby ruby-dev gem kpartx nmap sshpass hwinfo  
-sudo gem install bundle
-sudo bundle install
+sudo apt install ruby ruby-dev gem # If you don't use rbenv
+sudo apt install kpartx nmap sshpass hwinfo
+```
+For the following command you have to add sudo if you don't use rbenv.
+```bash
+gem update --system
+gem install bundle
+bundle install
 ```
 ## Run the SD-maker
 You can run the SD-Maker script by executing the following command :
