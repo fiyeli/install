@@ -2,17 +2,18 @@
 sudo pip install --upgrade git+https://github.com/Maratyszcza/PeachPy
 # Install confu
 sudo pip install --upgrade git+https://github.com/Maratyszcza/confu
+# Install clang
+sudo apt-get install clang
 # Install Ninja
 git clone https://github.com/ninja-build/ninja.git
 cd ninja
 git checkout release
 ./configure.py --bootstrap
 export NINJA_PATH=$PWD
-# Install clang
-sudo apt-get install clang
-git clone https://github.com/digitalbrain79/NNPACK-darknet.git
 
 # Build NNPACK
+cd
+git clone https://github.com/digitalbrain79/NNPACK-darknet.git
 cd NNPACK-darknet
 confu setup
 python ./configure.py --backend auto
