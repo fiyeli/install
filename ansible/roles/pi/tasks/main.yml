@@ -185,6 +185,12 @@
     cd $FIYELI_AI_DIR
     make
 
+- name: Download files weights from HTTP, HTTPS, or FTP to node
+  get_url:
+    url: https://pjreddie.com/media/files/yolov2.weights
+    dest: ~/Fiyeli/Fiyeli-Darknet-NNPACK
+
+
 - name: 'Reboot'
   shell: sleep 2 && reboot
   async: 1
