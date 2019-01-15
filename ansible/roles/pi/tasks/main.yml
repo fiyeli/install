@@ -60,17 +60,17 @@
   become: false
   command: mv ~/Fiyeli/api-master ~/Fiyeli/api
 
-  name: ansible create directory img
-    file:
+- name: ansible create directory img
+  file:
       path: ~/Fiyeli/core/img
       state: directory
-    become: false
+  become: false
 
-  name: ansible create directory data
-    file:
+- name: ansible create directory data
+  file:
       path: ~/Fiyeli/core/data
       state: directory
-    become: false
+  become: false
 
 - name : Set env variable
   become: false
@@ -110,17 +110,17 @@
     # Main routine
     export FIYELI_CORE_ROUTINE="$FIYELI_CORE_DIR/routine.py"
     echo "export FIYELI_CORE_ROUTINE=\"$FIYELI_CORE_DIR/routine.py\"" >> ~/.profile
-    
+
 - name: Install git
   become: true
   apt:
     name: git
-    
+
 - name: Install pip
   become: true
   apt:
     name: python-pip
-    
+
 - name: install pip ia PeachPy
   pip:
     name: git+https://github.com/Maratyszcza/PeachPy
