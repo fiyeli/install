@@ -29,7 +29,7 @@ export FIYELI_AI_DIR="$FIYELI_DIR/Fiyeli-Darknet-NNPACK"
 echo "export FIYELI_AI_DIR=\"$FIYELI_DIR/Fiyeli-Darknet-NNPACK\"" >> ~/.profile
 
 export FIYELI_API_DIR="$FIYELI_DIR/api"
-echo "export FIYELI_AI_DIR=\"$FIYELI_DIR/api\"" >> ~/.profile
+echo "export FIYELI_API_DIR=\"$FIYELI_DIR/api\"" >> ~/.profile
 
 export FIYELI_IMAGES="$FIYELI_CORE_DIR/img"
 echo "export FIYELI_IMAGES=\"$FIYELI_CORE_DIR/img\"" >> ~/.profile

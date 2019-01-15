@@ -91,7 +91,7 @@
     echo "export FIYELI_AI_DIR=\"$FIYELI_DIR/Fiyeli-Darknet-NNPACK\"" >> ~/.profile
 
     export FIYELI_API_DIR="$FIYELI_DIR/api"
-    echo "export FIYELI_AI_DIR=\"$FIYELI_DIR/api\"" >> ~/.profile
+    echo "export FIYELI_API_DIR=\"$FIYELI_DIR/api\"" >> ~/.profile
 
     export FIYELI_IMAGES="$FIYELI_CORE_DIR/img"
     echo "export FIYELI_IMAGES=\"$FIYELI_CORE_DIR/img\"" >> ~/.profile
@@ -134,6 +134,11 @@
 #   apt:
 #     name: ninja-build
 #
+- name: Install clang
+  become: true
+  apt:
+    name: clang
+
 - name: Install ninja
   become: false
   shell: |
@@ -145,17 +150,11 @@
     ./configure.py --bootstrap
     export NINJA_PATH=$PWD
 
-- name: Install clang
-  become: true
-  apt:
-    name: clang
-
 - name: clone NNPACK-darknet
   become: false
   git:
     repo: 'https://github.com/digitalbrain79/NNPACK-darknet.git'
     dest: ~/NNPACK-darknet
-
 
 - name: Install NNPACK confu
   become: false
@@ -163,6 +162,7 @@
     # Build NNPACK
     cd ~/NNPACK-darknet
     confu setup
+
 - name: Install NNPACK python configure
   become: false
   shell:  |
@@ -175,6 +175,7 @@
     cd ~/NNPACK-darknet
     $NINJA_PATH/ninja
     # ninja
+
 - name: Copy binary
   become: false
   shell:  |
@@ -186,7 +187,6 @@
     # Build darknet (with NNpack by default)
     cd $FIYELI_AI_DIR
     make
-
 
 - name: 'Reboot'
   shell: sleep 2 && reboot
