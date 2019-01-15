@@ -171,7 +171,8 @@ def setup_rasp_boot
 end
 
 def enable_camera
-  `echo "\nstart_x=1\ngpu_mem=128\ndisable_camera_led=1\n" | sudo tee -a #{TMP_MOUNT_ENDPOINT}/config.txt`
+  `echo "\nstart_x=1\ngpu_mem=128\ndisable_camera_led=1\n" \
+    | sudo tee -a #{TMP_MOUNT_ENDPOINT}/config.txt`
 end
 
 def umount_part1_img
@@ -187,12 +188,26 @@ def build_part2_img(dev_mapper)
   puts('end setting boot partition')
   mount_part("/dev/mapper/#{dev_mapper[1].first}")
 
-  hostname = "fiyeli-#{Faker::Science.scientist.gsub!(/\s/, '-')}"
+  hostname = "fiyeli-#{Faker::Simpsons.character.gsub!(/\s/, '-')}"
+  write_hostname(hostname)
+  update_hosts(hostname)
+  hostname
+end
+
+def update_hosts(hostname)
+  cmd_hosts = "sudo sed -i '/^127/ s/$/ #{hostname}/' \
+ #{TMP_MOUNT_ENDPOINT}/etc/hosts"
+  exec_with_sudo(cmd_hosts, 'need root for update hosts file')
+  cmd_hosts = "sudo sed -i '/^::/ s/$/ #{hostname}/' \
+  #{TMP_MOUNT_ENDPOINT}/etc/hosts"
+  exec_with_sudo(cmd_hosts, 'need root for update hosts file')
+end
+
+def write_hostname(hostname)
   cmd_hostname = "echo #{hostname} "\
                  " | sudo tee #{TMP_MOUNT_ENDPOINT}/etc/hostname"
   exec_with_sudo(cmd_hostname,
                  "need root access to umount sd card on #{TMP_MOUNT_ENDPOINT}")
-  hostname
 end
 
 def umount_part2_img_and_remove_mapper
