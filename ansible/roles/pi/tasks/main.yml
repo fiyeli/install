@@ -123,31 +123,37 @@
 
 - name: install pip ia PeachPy
   pip:
+    name: picamera
+
+- name: install pip ia PeachPy
+  pip:
     name: git+https://github.com/Maratyszcza/PeachPy
 
 - name: install pip ia confu
   pip:
     name: git+https://github.com/Maratyszcza/confu
 
-# - name: install ninja
-#   become: true
-#   apt:
-#     name: ninja-build
-#
+- name: install ninja
+  become: true
+  apt:
+    name: ninja-build
+
+# - name: Install ninja
+#   become: false
+#   shell: |
+#     cd ~
+#     # Install Ninja
+#     # export CC=clang 
+#     # export CXX=clang++ 
+#     git clone https://github.com/ninja-build/ninja.git
+#     cd ninja
+#     git checkout release
+#     ./configure.py --bootstrap
+
 - name: Install clang
   become: true
   apt:
     name: clang
-
-- name: Install ninja
-  become: false
-  shell: |
-    cd ~
-    # Install Ninja
-    git clone https://github.com/ninja-build/ninja.git
-    cd ninja
-    git checkout release
-    ./configure.py --bootstrap
 
 - name: clone NNPACK-darknet
   become: false
@@ -171,7 +177,7 @@
   become: false
   shell:  |
     cd ~/NNPACK-darknet
-    ~/ninja/ninja
+    ninja
 
 - name: Copy binary
   become: false
@@ -181,22 +187,41 @@
     sudo cp include/nnpack.h /usr/include/
     sudo cp deps/pthreadpool/include/pthreadpool.h /usr/include/
 
+- name: build Fiyeli IA
+  become: false
+  shell: |
     # Build darknet (with NNpack by default)
-    cd $FIYELI_AI_DIR
+    cd ~/Fiyeli/Fiyeli-Darknet-NNPACK
     make
 
 - name: Download files weights from HTTP, HTTPS, or FTP to node
+  become: false
   get_url:
     url: https://pjreddie.com/media/files/yolov2.weights
     dest: ~/Fiyeli/Fiyeli-Darknet-NNPACK
 
-
-- name: 'Reboot'
-  shell: sleep 2 && reboot
-  async: 1
-  poll: 0
-  ignore_errors: true
-
-- name: "Wait for Raspberry PI to come back"
-  local_action: wait_for host={{ real_ansible_host }} port=22 state=started delay=10
+- name: Setup api
   become: false
+  pip:
+    requirements: ~/Fiyeli/api/requirements.txt
+
+- name: install gunicorn
+  become: true
+  apt:
+    name: gunicorn
+
+- name: simple gunicorn run example
+  become: false
+  gunicorn:
+    app: 'wsgi:app'
+    chdir: '~/Fiyeli/api/'
+
+# - name: 'Reboot'
+#   shell: sleep 2 && reboot
+#   async: 1
+#   poll: 0
+#   ignore_errors: true
+
+# - name: "Wait for Raspberry PI to come back"
+#   local_action: wait_for host={{ real_ansible_host }} port=22 state=started delay=10
+#   become: false
