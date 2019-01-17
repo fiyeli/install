@@ -22,7 +22,7 @@
 
 - name: Download and extract fiyeli core
   unarchive:
-    src: https://github.com/pilbi/core/archive/master.zip
+    src: https://github.com/fiyeli/core/archive/master.zip
     dest: ~/Fiyeli
     remote_src: yes
   become: false
@@ -33,7 +33,7 @@
 - name: Download and extract fiyeli camera
   become: false
   unarchive:
-    src: https://github.com/pilbi/camera/archive/master.zip
+    src: https://github.com/fiyeli/camera/archive/master.zip
     dest: ~/Fiyeli
     remote_src: yes
 - name: rename core-master
@@ -43,7 +43,7 @@
 - name: Download and extract fiyeli Fiyeli-Darknet-NNPACK
   become: false
   unarchive:
-    src: https://github.com/pilbi/Fiyeli-Darknet-NNPACK/archive/master.zip
+    src: https://github.com/fiyeli/Fiyeli-Darknet-NNPACK/archive/master.zip
     dest: ~/Fiyeli
     remote_src: yes
 - name: rename core-master
@@ -53,7 +53,7 @@
 - name: Download and extract fiyeli api
   become: false
   unarchive:
-    src: https://github.com/pilbi/api/archive/master.zip
+    src: https://github.com/fiyeli/api/archive/master.zip
     dest: ~/Fiyeli
     remote_src: yes
 - name: rename api-master
