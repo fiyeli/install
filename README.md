@@ -24,7 +24,8 @@ It will :
 
 
 # Utils
-To find your ip on network
+To find the ip of the Raspberry on the network given its name, run :
 ```console
-./sd-card.rb --scan fiyeli-Emil-Fischer
+./sd-card.rb --scan {Raspberry name}
+# For example : ./sd-card.rb --scan fiyeli-Crazy-Cat-Lady
 ```
