@@ -5,7 +5,7 @@ You will anyway have to install some dependencies.
 Open a Terminal, go into the project repository and complete the following steps if needed :
 ```bash
 sudo apt install ruby ruby-dev gem # If you don't use rbenv
-sudo apt install kpartx nmap sshpass hwinfo
+sudo apt install kpartx nmap sshpass hwinfo net-tools
 ```
 For the following command you have to add sudo if you don't use rbenv.
 ```bash
