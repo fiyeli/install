@@ -207,12 +207,12 @@
   apt:
     name: gunicorn
 
-- name: simple gunicorn run example
+- name: gunicorn api
   become: false
-  gunicorn:
-    app: 'wsgi:app'
-    chdir: '~/Fiyeli/api/'
-    config: '~/Fiyeli/api/config.py'
+  shell: |
+    echo ensure no previous gunicorn
+    . ~/.profile && /usr/bin/python /usr/bin/gunicorn -D --chdir /home/pi/Fiyeli/api/ -c /home/pi/Fiyeli/api/config.py -u pi --error-logfile /tmp/gunicorn.temp.error.log --pid /tmp/gunicorn.temp.pid wsgi:app
+
 
 - name: Creates an entry like "*/3 08-18 * * 1-5 $FIYELI_CORE_ROUTINE"
   become: false
