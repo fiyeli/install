@@ -230,7 +230,7 @@
     hour: "08-18"
     weekday: "1-5"
     user: pi
-    job: "$FIYELI_CORE_ROUTINE"
+    job: ". $HOME/.profile ; $FIYELI_CORE_ROUTINE"
 
 # - name: 'Reboot'
 #   shell: sleep 2 && reboot
