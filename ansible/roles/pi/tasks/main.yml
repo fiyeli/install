@@ -222,6 +222,16 @@
     chdir: '~/Fiyeli/api/'
     config: 'config.py'
 
+- name: Creates an entry like "*/5 08-18 * * 1-5 $FIYELI_CORE_ROUTINE"
+  become: false
+  cron:
+    name: "run fieyeli_core_routine"
+    minute: "*/5"
+    hour: "08-18"
+    weekday: "1-5"
+    user: pi
+    job: "$FIYELI_CORE_ROUTINE"
+
 # - name: 'Reboot'
 #   shell: sleep 2 && reboot
 #   async: 1
