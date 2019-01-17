@@ -31,7 +31,7 @@
     dest: ~/Fiyeli
     remote_src: yes
   become: false
-  
+
 - name: rename core-master
   become: false
   command: mv ~/Fiyeli/core-master ~/Fiyeli/core
@@ -212,7 +212,7 @@
   gunicorn:
     app: 'wsgi:app'
     chdir: '~/Fiyeli/api/'
-    config: 'config.py'
+    config: '~/Fiyeli/api/config.py'
 
 - name: Creates an entry like "*/5 08-18 * * 1-5 $FIYELI_CORE_ROUTINE"
   become: false
