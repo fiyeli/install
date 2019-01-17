@@ -214,7 +214,7 @@
     chdir: '~/Fiyeli/api/'
     config: '~/Fiyeli/api/config.py'
 
-- name: Creates an entry like "*/5 08-18 * * 1-5 $FIYELI_CORE_ROUTINE"
+- name: Creates an entry like "*/3 08-18 * * 1-5 $FIYELI_CORE_ROUTINE"
   become: false
   cron:
     name: "run fieyeli_core_routine"
