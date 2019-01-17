@@ -111,6 +111,11 @@
     export FIYELI_CORE_ROUTINE="$FIYELI_CORE_DIR/routine.py"
     echo "export FIYELI_CORE_ROUTINE=\"$FIYELI_CORE_DIR/routine.py\"" >> ~/.profile
 
+- name: Install clang
+  become: true
+  apt:
+    name: clang
+
 - name: Install git
   become: true
   apt:
@@ -150,11 +155,6 @@
 #     git checkout release
 #     ./configure.py --bootstrap
 
-- name: Install clang
-  become: true
-  apt:
-    name: clang
-
 - name: clone NNPACK-darknet
   become: false
   git:
@@ -177,7 +177,7 @@
   become: false
   shell:  |
     cd ~/NNPACK-darknet
-    ninja
+    ninja -j 1
 
 - name: Copy binary
   become: false
